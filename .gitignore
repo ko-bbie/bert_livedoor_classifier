@@ -4,3 +4,4 @@
 *.tsv
 *.cfg
 *.html
+__pycache__/
