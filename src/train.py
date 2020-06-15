@@ -39,7 +39,6 @@ def run():
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = BertBaseJapanese()
-    model.to(device)
 
     param_optimizer = list(model.named_parameters())
     no_decay = ["bias", "LayerNorm.bias", "LayerNorm.weight"]
@@ -64,7 +63,8 @@ def run():
         optimizer, num_warmup_steps=0, num_training_steps=num_train_steps
     )
 
-    model = nn.DataParallel(model)
+    if torch.cuda.device_count() > 1:
+        model = nn.DataParallel(model)
 
     best_accuracy = 0
     for epoch in range(config.EPOCHS):
@@ -75,6 +75,7 @@ def run():
         if accuracy > best_accuracy:
             torch.save(model.state_dict(), config.MODEL_PATH)
             best_accuracy = accuracy
+        print(f"epoch = {epoch}, best_accuracy = {best_accuracy}")
 
 
 if __name__ == "__main__":
