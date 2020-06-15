@@ -17,6 +17,21 @@ def category_dict():
     return dic
 
 
+def category_dict_from_num():
+    dic = {
+        0: "sports-watch",
+        1: "smax",
+        2: "dokujo-tsushin",
+        3: "movie-enter",
+        4: "it-life-hack",
+        5: "kaden-channel",
+        6: "peachy",
+        7: "topic-news",
+        8: "livedoor-homme",
+    }
+    return dic
+
+
 def normalize(text):
     text = normalize_unicode(text)
     text = capitalize_symbols(text)

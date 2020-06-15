@@ -39,6 +39,7 @@ def run():
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = BertBaseJapanese()
+    model.to(device)
 
     param_optimizer = list(model.named_parameters())
     no_decay = ["bias", "LayerNorm.bias", "LayerNorm.weight"]
