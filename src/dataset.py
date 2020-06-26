@@ -28,10 +28,15 @@ class LivedoorDataset:
         token_type_ids = inputs["token_type_ids"]
 
         padding_len = self.max_len - len(ids)
-        if padding_len > 0:
+        if padding_len >= 0:
             ids = ids + [0] * padding_len
             mask = mask + [0] * padding_len
             token_type_ids = token_type_ids + [0] * padding_len
+        else:
+            half_len = int(self.max_len / 2)
+            ids = ids[:half_len] + ids[-half_len - 1 :]
+            mask = mask[:half_len] + mask[-half_len - 1 :]
+            token_type_ids = token_type_ids[:half_len] + token_type_ids[-half_len - 1 :]
 
         return {
             "ids": torch.tensor(ids, dtype=torch.long),
