@@ -7,7 +7,11 @@ import config
 class BertBaseJapanese(nn.Module):
     def __init__(self):
         super(BertBaseJapanese, self).__init__()
-        self.bert = transformers.BertModel.from_pretrained(config.BERT_PATH)
+        bertconfig = transformers.BertConfig.from_pretrained("bert-base-uncased")
+        bertconfig.vocab_size = 32000
+        bertforpretraining = transformers.BertForPreTraining(bertconfig)
+        bertforpretraining.load_tf_weights(bertconfig, config.BERT_PATH)
+        self.bert = bertforpretraining.bert
         self.bert_drop = nn.Dropout(0.3)
         self.out = nn.Linear(768, 9)
 
