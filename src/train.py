@@ -9,6 +9,7 @@ import config
 import dataset
 import engine
 from model import BertBaseJapanese
+from utils import EarlyStopping
 
 
 def run():
@@ -67,16 +68,16 @@ def run():
     if torch.cuda.device_count() > 1:
         model = nn.DataParallel(model)
 
-    best_accuracy = 0
+    es = EarlyStopping(patience=5, mode="max")
     for epoch in range(config.EPOCHS):
         engine.train_fn(train_data_loader, model, optimizer, device, scheduler)
         outputs, targets = engine.valid_fn(valid_data_loader, model, device)
         accuracy = metrics.accuracy_score(targets, outputs)
-        print(f"Accuracy Score = {accuracy}")
-        if accuracy > best_accuracy:
-            torch.save(model.state_dict(), config.MODEL_PATH)
-            best_accuracy = accuracy
-        print(f"epoch = {epoch}, best_accuracy = {best_accuracy}")
+        print(f"epoch = {epoch}, accuracy = {accuracy}")
+        es(accuracy, model, config.MODEL_PATH)
+        if es.early_stop:
+            print("EarlyStopping.")
+            break
 
 
 if __name__ == "__main__":
