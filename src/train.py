@@ -8,7 +8,7 @@ from transformers import AdamW, get_linear_schedule_with_warmup
 import config
 import dataset
 import engine
-from model import BertBaseJapanese
+from model import AlbertBaseJapanese
 from utils import EarlyStopping
 
 
@@ -39,7 +39,7 @@ def run():
     )
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = BertBaseJapanese()
+    model = AlbertBaseJapanese()
     model.to(device)
 
     param_optimizer = list(model.named_parameters())

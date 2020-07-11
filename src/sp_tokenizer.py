@@ -12,7 +12,7 @@ class BertSentencePieceTokenizer:
         self.pad_id = self.tokenizer.piece_to_id("[PAD]")
 
     def encode_plus(
-        self, text, text_pair=None, add_special_tokens=True, max_length=None
+        self, text, text_pair=None, add_special_tokens=True, max_length=None, *args
     ):
         if add_special_tokens:
             if text_pair:

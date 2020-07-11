@@ -19,9 +19,7 @@ class LivedoorDataset:
     def __getitem__(self, item):
         article = utils.normalize(self.article[item])
 
-        inputs = self.tokenizer.encode_plus(
-            article, add_special_tokens=True, max_length=self.max_len
-        )
+        inputs = self.tokenizer.encode_plus(article, add_special_tokens=True)
 
         ids = inputs["input_ids"]
         mask = inputs["attention_mask"]
@@ -34,9 +32,9 @@ class LivedoorDataset:
             token_type_ids = token_type_ids + [0] * padding_len
         else:
             half_len = int(self.max_len / 2)
-            ids = ids[:half_len] + ids[-half_len - 1 :]
-            mask = mask[:half_len] + mask[-half_len - 1 :]
-            token_type_ids = token_type_ids[:half_len] + token_type_ids[-half_len - 1 :]
+            ids = ids[:half_len] + ids[-half_len:]
+            mask = mask[:half_len] + mask[-half_len:]
+            token_type_ids = token_type_ids[:half_len] + token_type_ids[-half_len:]
 
         return {
             "ids": torch.tensor(ids, dtype=torch.long),

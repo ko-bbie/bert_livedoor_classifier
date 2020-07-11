@@ -5,7 +5,7 @@ import torch.nn as nn
 import config
 import dataset
 import engine
-from model import BertBaseJapanese
+from model import AlbertBaseJapanese
 from utils import category_dict_from_num
 
 
@@ -18,7 +18,7 @@ def predict():
     )
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = BertBaseJapanese()
+    model = AlbertBaseJapanese()
     model.to(device)
 
     if torch.cuda.device_count() > 1:
